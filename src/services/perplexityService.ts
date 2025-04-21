@@ -1,7 +1,7 @@
 
 import { create } from 'zustand';
 
-// Store for managing the API key
+// Store for managing the API key (UI/State, but not used for API calls anymore)
 interface PerplexityStore {
   apiKey: string;
   setApiKey: (key: string) => void;
@@ -25,14 +25,9 @@ export const marketShareData = {
 
 // Function to query Perplexity API
 export async function queryPerplexity(question: string, context?: string) {
-  const apiKey = usePerplexityStore.getState().apiKey;
+  // Use the provided Perplexity API key, always
+  const apiKey = "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";
   
-  if (!apiKey) {
-    return { 
-      error: "No API key provided. Please enter your Perplexity API key in settings."
-    };
-  }
-
   const prompt = `
   Context: You are analyzing PC market share data for a dashboard presented to Lenovo's CMO.
   The current market share data (Q1 2025) is as follows:
@@ -100,3 +95,4 @@ export const sampleQuestions = [
   "compare Lenovo's performance in different market segments (consumer, commercial, education)",
   "explain the factors behind Lenovo's 9.6% year-over-year growth"
 ];
+
