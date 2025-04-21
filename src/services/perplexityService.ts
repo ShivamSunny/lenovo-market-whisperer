@@ -33,7 +33,7 @@ export async function queryPerplexity(question: string, context?: string) {
   The current market share data (Q1 2025) is as follows:
   ${JSON.stringify(marketShareData, null, 2)}
   
-  Based on this data, please ${question}
+  Question: ${question}
   
   Additional context: ${context || "None provided"}
   
@@ -50,7 +50,7 @@ export async function queryPerplexity(question: string, context?: string) {
       body: JSON.stringify({
         model: "llama-3.1-sonar-small-128k-online",
         messages: [
-          { role: "system", content: "You are a data analysis assistant specializing in market share analysis and visualization." },
+          { role: "system", content: "You are a data analysis assistant specializing in market share analysis and visualization. Always respond with valid JSON containing analysis, key_points (as an array), and visualization_suggestions fields." },
           { role: "user", content: prompt }
         ],
         max_tokens: 1000
@@ -69,17 +69,20 @@ export async function queryPerplexity(question: string, context?: string) {
       const content = data.choices[0].message.content;
       return JSON.parse(content);
     } catch (e) {
-      // If parsing fails, return the raw content
+      // If parsing fails, return the raw content in a structured format
       return {
         analysis: data.choices[0].message.content,
-        key_points: [],
+        key_points: ["Could not parse structured response"],
         visualization_suggestions: "Could not parse structured data from response."
       };
     }
   } catch (error) {
     console.error("Error querying Perplexity API:", error);
     return { 
-      error: error instanceof Error ? error.message : "Unknown error occurred" 
+      error: error instanceof Error ? error.message : "Unknown error occurred",
+      analysis: "An error occurred while processing your request.",
+      key_points: ["Error connecting to analysis service"],
+      visualization_suggestions: "Not available due to error" 
     };
   }
 }
@@ -95,4 +98,3 @@ export const sampleQuestions = [
   "compare Lenovo's performance in different market segments (consumer, commercial, education)",
   "explain the factors behind Lenovo's 9.6% year-over-year growth"
 ];
-

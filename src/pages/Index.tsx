@@ -10,8 +10,6 @@ import CompanyMetrics from "@/components/CompanyMetrics";
 import { usePerplexityStore } from "@/services/perplexityService";
 
 export default function Dashboard() {
-  const { apiKey } = usePerplexityStore();
-
   // Initialize API key from localStorage on mount
   React.useEffect(() => {
     const savedKey = localStorage.getItem('perplexityApiKey');
@@ -45,11 +43,8 @@ export default function Dashboard() {
         <TabsContent value="insights" className="p-0 mt-4">
           <div className="grid gap-4">
             <p className="text-sm text-muted-foreground">
-              {!apiKey ? (
-                "Please set your Perplexity API key to enable strategic insights."
-              ) : (
-                "Use the analysis tools to gain strategic insights about Lenovo's market position."
-              )}
+              Use the analysis tools to gain strategic insights about Lenovo's market position compared to competitors. 
+              Ask any question about the PC market data.
             </p>
             <CompetitiveAnalysis />
           </div>
