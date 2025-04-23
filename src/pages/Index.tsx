@@ -34,7 +34,7 @@ export default function Dashboard() {
       
       <Tabs defaultValue="analysis" className="w-full">
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="analysis">Competitive Analysis</TabsTrigger>
+          <TabsTrigger value="analysis">Market Intelligence</TabsTrigger>
           <TabsTrigger value="insights">Strategic Insights</TabsTrigger>
         </TabsList>
         <TabsContent value="analysis" className="p-0 mt-4">
@@ -43,8 +43,8 @@ export default function Dashboard() {
         <TabsContent value="insights" className="p-0 mt-4">
           <div className="grid gap-4">
             <p className="text-sm text-muted-foreground">
-              Use the analysis tools to gain strategic insights about Lenovo's market position compared to competitors. 
-              Ask any question about the PC market data.
+              Ask the AI-powered analyst about anything related to PC market data, competitive landscape, or strategic recommendations.
+              Examples: "How can Lenovo grow in the premium segment?" or "Compare Lenovo's performance across different regions."
             </p>
             <CompetitiveAnalysis />
           </div>
