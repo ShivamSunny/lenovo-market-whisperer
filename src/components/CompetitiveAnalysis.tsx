@@ -125,42 +125,81 @@ export default function CompetitiveAnalysis() {
       "rgba(201, 203, 207, 0.8)"    // Gray
     ];
 
-    // Generate chart data format for ChartJS
-    const data: ChartData<"bar" | "line" | "pie"> = {
-      labels: chartData.labels,
-      datasets: chartData.datasets.map((dataset, index) => ({
-        label: dataset.label,
-        data: dataset.data,
-        backgroundColor: chartData.type === 'line' 
-          ? colorPalette[index % colorPalette.length].replace('0.8', '0.2')
-          : chartData.datasets.map((_, i) => colorPalette[i % colorPalette.length]),
-        borderColor: chartData.type === 'line' 
-          ? colorPalette[index % colorPalette.length]
-          : chartData.datasets.map((_, i) => colorPalette[i % colorPalette.length].replace('0.8', '1')),
-        borderWidth: 1,
-      })),
-    };
-
-    const options: ChartOptions<"bar" | "line" | "pie"> = {
-      responsive: true,
-      plugins: {
-        legend: {
-          position: 'top',
-        },
-        title: {
-          display: true,
-          text: chartData.title,
-        },
-      },
-    };
-
+    // Generate chart data using type-specific formats
     switch(chartData.type) {
-      case 'bar':
-        return <Bar data={data} options={options} />;
-      case 'pie':
-        return <Pie data={data} options={options} />;
-      case 'line':
-        return <Line data={data} options={options} />;
+      case 'bar': {
+        const barData: ChartData<'bar'> = {
+          labels: chartData.labels,
+          datasets: chartData.datasets.map((dataset, index) => ({
+            label: dataset.label,
+            data: dataset.data,
+            backgroundColor: colorPalette[index % colorPalette.length],
+            borderColor: colorPalette[index % colorPalette.length].replace('0.8', '1'),
+            borderWidth: 1,
+          })),
+        };
+        
+        const barOptions: ChartOptions<'bar'> = {
+          responsive: true,
+          plugins: {
+            legend: { position: 'top' },
+            title: { display: true, text: chartData.title },
+          },
+        };
+        
+        return <Bar data={barData} options={barOptions} />;
+      }
+
+      case 'pie': {
+        const pieData: ChartData<'pie'> = {
+          labels: chartData.labels,
+          datasets: chartData.datasets.map((dataset) => ({
+            label: dataset.label,
+            data: dataset.data,
+            backgroundColor: chartData.datasets.map((_, i) => 
+              colorPalette[i % colorPalette.length]
+            ),
+            borderColor: chartData.datasets.map((_, i) => 
+              colorPalette[i % colorPalette.length].replace('0.8', '1')
+            ),
+            borderWidth: 1,
+          })),
+        };
+        
+        const pieOptions: ChartOptions<'pie'> = {
+          responsive: true,
+          plugins: {
+            legend: { position: 'top' },
+            title: { display: true, text: chartData.title },
+          },
+        };
+        
+        return <Pie data={pieData} options={pieOptions} />;
+      }
+
+      case 'line': {
+        const lineData: ChartData<'line'> = {
+          labels: chartData.labels,
+          datasets: chartData.datasets.map((dataset, index) => ({
+            label: dataset.label,
+            data: dataset.data,
+            borderColor: colorPalette[index % colorPalette.length],
+            backgroundColor: colorPalette[index % colorPalette.length].replace('0.8', '0.2'),
+            tension: 0.3,
+          })),
+        };
+        
+        const lineOptions: ChartOptions<'line'> = {
+          responsive: true,
+          plugins: {
+            legend: { position: 'top' },
+            title: { display: true, text: chartData.title },
+          },
+        };
+        
+        return <Line data={lineData} options={lineOptions} />;
+      }
+
       default:
         return <p className="text-muted-foreground">Chart type not supported</p>;
     }
